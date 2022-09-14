@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/more_options"
+        android:title="options"
+        android:icon="@drawable/ic_baseline_more_vert_24"
+        app:showAsAction="always">
+        <menu>
+            <item android:id="@+id/noteSaveOption"
+                android:title="Save Changes"
+                app:showAsAction="ifRoom"/>
+
+            <item android:id="@+id/noteDeleteOption"
+                android:title="Delete"
+                app:showAsAction="ifRoom"/>
+
+            <item android:id="@+id/noteShareOption"
+                android:title="Share Note"
+                app:showAsAction="ifRoom"/>
+        </menu>
+
+    </item>
+</menu>

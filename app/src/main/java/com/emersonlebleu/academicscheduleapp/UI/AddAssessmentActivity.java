@@ -1,0 +1,208 @@
+package com.emersonlebleu.academicscheduleapp.UI;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.app.DatePickerDialog;
+import android.content.Intent;
+import android.os.Bundle;
+import android.renderscript.ScriptGroup;
+import android.text.InputType;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.Spinner;
+
+import com.emersonlebleu.academicscheduleapp.Database.Repository;
+import com.emersonlebleu.academicscheduleapp.Entity.Assessment;
+import com.emersonlebleu.academicscheduleapp.Entity.Course;
+import com.emersonlebleu.academicscheduleapp.Entity.Note;
+import com.emersonlebleu.academicscheduleapp.Entity.Term;
+import com.emersonlebleu.academicscheduleapp.R;
+
+import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Locale;
+
+public class AddAssessmentActivity extends AppCompatActivity {
+    int courseId;
+
+    EditText assessmentTitleField;
+    EditText startDateField;
+    EditText endDateField;
+    Spinner typeField;
+    Spinner courseIdField;
+
+    String title;
+    String startDate;
+    String endDate;
+    String type;
+
+    String pathDeterminer;
+
+    DatePickerDialog.OnDateSetListener start;
+    DatePickerDialog.OnDateSetListener end;
+
+    final Calendar calendarStart = Calendar.getInstance();
+    final Calendar calendarEnd = Calendar.getInstance();
+
+    String dtFormat = "MM/dd/yyyy";
+    SimpleDateFormat format = new SimpleDateFormat(dtFormat, Locale.US);
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_add_assessment);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        pathDeterminer = MainActivity.rootList;
+
+        assessmentTitleField = findViewById(R.id.addAssessmentTitleField);
+        startDateField = findViewById(R.id.addAssessmentStartField);
+        endDateField = findViewById(R.id.addAssessmentEndField);
+        typeField = findViewById(R.id.addAssessmentTypeField);
+        courseIdField = findViewById(R.id.addCourseOfAssessmentField);
+
+        courseId = getIntent().getIntExtra("courseId", -1);
+
+
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.type_array, android.R.layout.simple_spinner_dropdown_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        typeField.setAdapter(adapter);
+
+        //Setting Course Id Spinner
+        Repository repo = new Repository(getApplication());
+        List<Integer> courseIdArray = new ArrayList<>();
+
+        List<Course> courses = repo.getAllCourses();
+        for (Course course: courses){
+            courseIdArray.add(course.getId());
+        }
+
+        ArrayAdapter<Integer> courseIdAdapter = new ArrayAdapter<Integer>(this, android.R.layout.simple_spinner_dropdown_item, courseIdArray);
+        courseIdField.setAdapter(courseIdAdapter);
+
+        if(courseId != -1){
+            courseIdField.setSelection(courseIdAdapter.getPosition(courseId));
+        } else {
+            courseIdField.setSelection(0);
+        }
+
+        //START DATE PICKER ----------------------------------------------------------------
+        startDateField.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Date date;
+
+                String tempStartDate = startDateField.getText().toString();
+                if (tempStartDate.equals("")) tempStartDate = LocalDate.now().format(DateTimeFormatter.ofPattern("MM/dd/yyyy"));
+                System.out.println(tempStartDate);
+
+                try {
+                    calendarStart.setTime(format.parse(tempStartDate));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                new DatePickerDialog(AddAssessmentActivity.this, start, calendarStart.get(Calendar.YEAR), calendarStart.get(Calendar.MONTH), calendarStart.get(Calendar.DAY_OF_MONTH)).show();
+            }
+        });
+
+        start = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker datePicker, int year, int monthOfYear, int dayOfMonth) {
+                calendarStart.set(Calendar.YEAR, year);
+                calendarStart.set(Calendar.MONTH, monthOfYear);
+                calendarStart.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                updateLabelStart();
+            }
+        };
+
+        //END DATE PICKER -------------------------------------------------------------------------
+        endDateField.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Date date;
+
+                String tempEndDate = endDateField.getText().toString();
+                if (tempEndDate.equals("")) tempEndDate = LocalDate.now().plus(1, ChronoUnit.WEEKS).format(DateTimeFormatter.ofPattern("MM/dd/yyyy"));
+                System.out.println(tempEndDate);
+
+                try {
+                    calendarEnd.setTime(format.parse(tempEndDate));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                new DatePickerDialog(AddAssessmentActivity.this, end, calendarEnd.get(Calendar.YEAR), calendarEnd.get(Calendar.MONTH), calendarEnd.get(Calendar.DAY_OF_MONTH)).show();
+            }
+        });
+
+        end = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker datePicker, int year, int monthOfYear, int dayOfMonth) {
+                calendarEnd.set(Calendar.YEAR, year);
+                calendarEnd.set(Calendar.MONTH, monthOfYear);
+                calendarEnd.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                updateLabelEnd();
+            }
+        };
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item){
+        if (pathDeterminer.equals("Course") || pathDeterminer.equals("Term")){
+            Repository repo = new Repository(getApplication());
+            Course current = repo.getCourseById(courseId);
+
+            Intent intent = new Intent(AddAssessmentActivity.this, CourseDetails.class);
+            intent.putExtra("id", courseId);
+            intent.putExtra("termId", current.getTermId());
+            intent.putExtra("title", current.getTitle());
+            intent.putExtra("startDate", current.getStartDate());
+            intent.putExtra("endDate", current.getEndDate());
+            intent.putExtra("status", current.getStatus().toString());
+            intent.putExtra("instructorName", current.getInstructorName());
+            intent.putExtra("instructorPhone", current.getInstructorPhone());
+            intent.putExtra("instructorEmail", current.getInstructorEmail());
+
+            startActivity(intent);
+        } else {
+            Intent intent = new Intent(AddAssessmentActivity.this, ListView.class);
+            startActivity(intent);
+        }
+        return true;
+    }
+
+    public void saveNewAssessment(View view) {
+        title = assessmentTitleField.getText().toString();
+        startDate = startDateField.getText().toString();
+        endDate = endDateField.getText().toString();
+        type = typeField.getSelectedItem().toString().toUpperCase();
+        courseId = Integer.parseInt(courseIdField.getSelectedItem().toString());
+
+        Assessment newAssessment = new Assessment(title, startDate, endDate, Assessment.Type.valueOf(type), courseId);
+
+        Repository repo = new Repository(getApplication());
+        repo.insert(newAssessment);
+
+        onBackPressed();
+    }
+
+    private void updateLabelStart(){
+        startDateField.setText(format.format(calendarStart.getTime()));
+    }
+
+    private void updateLabelEnd(){
+        endDateField.setText(format.format(calendarEnd.getTime()));
+    }
+}

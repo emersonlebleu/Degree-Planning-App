@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".UI.AssessmentDetails"
+    tools:layout_editor_absoluteX="12dp"
+    tools:layout_editor_absoluteY="-14dp">
+
+
+    <Spinner
+        android:id="@+id/courseOfAssessmentField"
+        android:layout_width="90dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="528dp"
+        android:layout_marginTop="24dp"
+        android:ems="10"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/assessmentTitleField"
+        android:layout_width="309dp"
+        android:layout_height="44dp"
+        android:layout_marginStart="92dp"
+        android:layout_marginTop="20dp"
+        android:ems="10"
+        android:hint="Assessment Title"
+        android:inputType="textNoSuggestions"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/assessmentStartField"
+        android:layout_width="179dp"
+        android:layout_height="44dp"
+        android:layout_marginStart="220dp"
+        android:layout_marginTop="80dp"
+        android:ems="10"
+        android:focusable="false"
+        android:hint="Select Start"
+        android:inputType="text|date"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/assessmentEndField"
+        android:layout_width="179dp"
+        android:layout_height="44dp"
+        android:layout_marginStart="220dp"
+        android:layout_marginTop="132dp"
+        android:ems="10"
+        android:focusable="false"
+        android:hint="Select End"
+        android:inputType="text|date"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Spinner
+        android:id="@+id/assessmentTypeField"
+        android:layout_width="179dp"
+        android:layout_height="44dp"
+        android:layout_marginStart="220dp"
+        android:layout_marginTop="184dp"
+        android:ems="10"
+        android:inputType="textNoSuggestions"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="75dp"
+        android:layout_height="26dp"
+        android:layout_marginStart="452dp"
+        android:layout_marginTop="24dp"
+        android:text="Course ID:"
+        android:textAlignment="center"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

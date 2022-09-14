@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Academic Schedule App</string>
+    <string name="channel_name">appchannel</string>
+    <string name="channel_descritpion">appchanneldescription</string>
+
+    <string-array name="type_array">
+        <item>PERFORMANCE</item>
+        <item>OBJECTIVE</item>
+    </string-array>
+
+    <string-array name="status_array">
+        <item>IN_PROGRESS</item>
+        <item>COMPLETED</item>
+        <item>DROPPED</item>
+        <item>PLAN_TO_TAKE</item>
+    </string-array>
+</resources>
