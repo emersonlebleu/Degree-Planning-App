@@ -5,33 +5,25 @@ import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 
-@Entity(tableName = "assessments")
-public class Assessment {
-    @PrimaryKey(autoGenerate = true)
+public abstract class Assessment {
     private int id;
     private String title;
     private String startDate;
-    private String endDate;
-    private Type type;
     private int courseId;
 
     public enum Type {PERFORMANCE, OBJECTIVE};
 
     @Ignore
-    public Assessment(int id, String title, String startDate, String endDate, Type type, int courseId) {
+    public Assessment(int id, String title, String startDate, int courseId) {
         this.id = id;
         this.title = title;
         this.startDate = startDate;
-        this.endDate = endDate;
-        this.type = type;
         this.courseId = courseId;
     }
 
-    public Assessment(String title, String startDate, String endDate, Type type, int courseId) {
+    public Assessment(String title, String startDate, int courseId) {
         this.title = title;
         this.startDate = startDate;
-        this.endDate = endDate;
-        this.type = type;
         this.courseId = courseId;
     }
 
@@ -41,8 +33,6 @@ public class Assessment {
                 "id=" + id +
                 ", title='" + title + '\'' +
                 ", startDate=" + startDate +
-                ", endDate=" + endDate +
-                ", type=" + type +
                 ", courseId=" + courseId +
                 '}';
     }
@@ -69,22 +59,6 @@ public class Assessment {
 
     public void setStartDate(String startDate) {
         this.startDate = startDate;
-    }
-
-    public String getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(String endDate) {
-        this.endDate = endDate;
-    }
-
-    public Type getType() {
-        return type;
-    }
-
-    public void setType(Type type) {
-        this.type = type;
     }
 
     public int getCourseId() {

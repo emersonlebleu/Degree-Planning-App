@@ -5,10 +5,14 @@ import android.app.Application;
 import com.emersonlebleu.academicscheduleapp.DAO.AssessmentDAO;
 import com.emersonlebleu.academicscheduleapp.DAO.CourseDAO;
 import com.emersonlebleu.academicscheduleapp.DAO.NoteDAO;
+import com.emersonlebleu.academicscheduleapp.DAO.ObjectiveDAO;
+import com.emersonlebleu.academicscheduleapp.DAO.PerformanceDAO;
 import com.emersonlebleu.academicscheduleapp.DAO.TermDAO;
 import com.emersonlebleu.academicscheduleapp.Entity.Assessment;
 import com.emersonlebleu.academicscheduleapp.Entity.Course;
 import com.emersonlebleu.academicscheduleapp.Entity.Note;
+import com.emersonlebleu.academicscheduleapp.Entity.Objective;
+import com.emersonlebleu.academicscheduleapp.Entity.Performance;
 import com.emersonlebleu.academicscheduleapp.Entity.Term;
 
 import java.util.List;
@@ -20,15 +24,21 @@ public class Repository {
     private Term mTerm;
     private CourseDAO mCourseDAO;
     private Course mCourse;
-    private AssessmentDAO mAssessmentDAO;
-    private Assessment mAssessment;
+
+    private ObjectiveDAO mObjectiveDAO;
+    private Objective mObjective;
+    private PerformanceDAO mPerformanceDAO;
+    private Performance mPerformance;
+
     private NoteDAO mNoteDAO;
     private Note mNote;
     private List<Term> mAllTerms;
     private List<Course> mAllCourses;
     private List<Course> mCoursesInTerm;
+
     private List<Assessment> mAllAssessments;
     private List<Assessment> mAssessmentsInCourse;
+
     private List<Note> mAllNotes;
     private List<Note> mNotesInCourse;
 
@@ -39,7 +49,8 @@ public class Repository {
         ScheduleDBBuilder db = ScheduleDBBuilder.getDatabase(application);
         mTermDAO=db.termDAO();
         mCourseDAO=db.courseDAO();
-        mAssessmentDAO=db.assessmentDAO();
+        mPerformanceDAO = db.performanceDAO();
+        mObjectiveDAO = db.objectiveDAO();
         mNoteDAO=db.noteDAO();
     }
 
