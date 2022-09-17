@@ -23,7 +23,12 @@
             android:label="Add Note"
             android:parentActivityName=".UI.CourseDetails" />
         <activity
-            android:name=".UI.AddAssessmentActivity"
+            android:name=".UI.AddObjectiveActivity"
+            android:exported="false"
+            android:label="Add Assessment"
+            android:parentActivityName=".UI.CourseDetails" />
+        <activity
+            android:name=".UI.AddPerformanceActivity"
             android:exported="false"
             android:label="Add Assessment"
             android:parentActivityName=".UI.CourseDetails" />
@@ -46,11 +51,6 @@
             android:name=".UI.NotesList"
             android:exported="false"
             android:label="Notes"
-            android:parentActivityName=".UI.CourseDetails" />
-        <activity
-            android:name=".UI.AssessmentDetails"
-            android:exported="false"
-            android:label="Assessment Details"
             android:parentActivityName=".UI.CourseDetails" />
         <activity
             android:name=".UI.CourseDetails"

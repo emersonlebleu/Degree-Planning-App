@@ -2,13 +2,11 @@ package com.emersonlebleu.academicscheduleapp.Database;
 
 import android.app.Application;
 
-import com.emersonlebleu.academicscheduleapp.DAO.AssessmentDAO;
 import com.emersonlebleu.academicscheduleapp.DAO.CourseDAO;
 import com.emersonlebleu.academicscheduleapp.DAO.NoteDAO;
 import com.emersonlebleu.academicscheduleapp.DAO.ObjectiveDAO;
 import com.emersonlebleu.academicscheduleapp.DAO.PerformanceDAO;
 import com.emersonlebleu.academicscheduleapp.DAO.TermDAO;
-import com.emersonlebleu.academicscheduleapp.Entity.Assessment;
 import com.emersonlebleu.academicscheduleapp.Entity.Course;
 import com.emersonlebleu.academicscheduleapp.Entity.Note;
 import com.emersonlebleu.academicscheduleapp.Entity.Objective;
@@ -27,6 +25,7 @@ public class Repository {
 
     private ObjectiveDAO mObjectiveDAO;
     private Objective mObjective;
+
     private PerformanceDAO mPerformanceDAO;
     private Performance mPerformance;
 
@@ -36,8 +35,11 @@ public class Repository {
     private List<Course> mAllCourses;
     private List<Course> mCoursesInTerm;
 
-    private List<Assessment> mAllAssessments;
-    private List<Assessment> mAssessmentsInCourse;
+    private List<Objective> mAllObjectiveAssessments;
+    private List<Objective> mObjectiveAssessmentsInCourse;
+
+    private List<Performance> mAllPerformanceAssessments;
+    private List<Performance> mPerformanceAssessmentsInCourse;
 
     private List<Note> mAllNotes;
     private List<Note> mNotesInCourse;
@@ -181,10 +183,10 @@ public class Repository {
         return mAllCourses;
     }
 
-    //Assessment--------------------------------------------------
-    public void insert(Assessment assessment){
+    //ObjectiveAssessment--------------------------------------------------
+    public void insert(Objective objective){
         databaseExecutor.execute(()->{
-            mAssessmentDAO.insert(assessment);
+            mObjectiveDAO.insert(objective);
         });
         try {
             Thread.sleep( 1000);
@@ -193,9 +195,9 @@ public class Repository {
         }
     }
 
-    public void update(Assessment assessment){
+    public void update(Objective objective){
         databaseExecutor.execute(()->{
-            mAssessmentDAO.update(assessment);
+            mObjectiveDAO.update(objective);
         });
         try {
             Thread.sleep( 1000);
@@ -204,9 +206,9 @@ public class Repository {
         }
     }
 
-    public void delete(Assessment assessment){
+    public void delete(Objective objective){
         databaseExecutor.execute(()->{
-            mAssessmentDAO.delete(assessment);
+            mObjectiveDAO.delete(objective);
         });
         try {
             Thread.sleep( 1000);
@@ -215,40 +217,110 @@ public class Repository {
         }
     }
 
-    public List<Assessment> getAssessmentsInCourse(int courseId){
+    public List<Objective> getObjectiveAssessmentsInCourse(int courseId){
         databaseExecutor.execute(()->{
-            mAssessmentsInCourse=mAssessmentDAO.getAssessmentsInCourse(courseId);
+            mObjectiveAssessmentsInCourse = mObjectiveDAO.getObjectiveAssessmentsInCourse(courseId);
         });
         try {
             Thread.sleep( 1000);
         } catch (InterruptedException e){
             e.printStackTrace();
         }
-        return mAssessmentsInCourse;
+        return mObjectiveAssessmentsInCourse;
     }
 
-    public Assessment getAssessmentById(int id){
+    public Objective getObjectiveAssessmentById(int id){
         databaseExecutor.execute(()->{
-            mAssessment = mAssessmentDAO.getAssessmentById(id);
+            mObjective = mObjectiveDAO.getObjectiveAssessmentById(id);
         });
         try {
             Thread.sleep( 1000);
         } catch (InterruptedException e){
             e.printStackTrace();
         }
-        return mAssessment;
+        return mObjective;
     }
 
-    public List<Assessment> getAllAssessments(){
+    public List<Objective> getAllObjectiveAssessments(){
         databaseExecutor.execute(()->{
-            mAllAssessments=mAssessmentDAO.getAllAssessments();
+            mAllObjectiveAssessments=mObjectiveDAO.getAllObjectiveAssessments();
         });
         try {
             Thread.sleep( 1000);
         } catch (InterruptedException e){
             e.printStackTrace();
         }
-        return mAllAssessments;
+        return mAllObjectiveAssessments;
+    }
+
+    //PerformanceAssessment--------------------------------------------------
+    public void insert(Performance performance){
+        databaseExecutor.execute(()->{
+            mPerformanceDAO.insert(performance);
+        });
+        try {
+            Thread.sleep( 1000);
+        } catch (InterruptedException e){
+            e.printStackTrace();
+        }
+    }
+
+    public void update(Performance performance){
+        databaseExecutor.execute(()->{
+            mPerformanceDAO.update(performance);
+        });
+        try {
+            Thread.sleep( 1000);
+        } catch (InterruptedException e){
+            e.printStackTrace();
+        }
+    }
+
+    public void delete(Performance performance){
+        databaseExecutor.execute(()->{
+            mPerformanceDAO.delete(performance);
+        });
+        try {
+            Thread.sleep( 1000);
+        } catch (InterruptedException e){
+            e.printStackTrace();
+        }
+    }
+
+    public List<Performance> getPerformanceAssessmentsInCourse(int courseId){
+        databaseExecutor.execute(()->{
+            mPerformanceAssessmentsInCourse = mPerformanceDAO.getPerformanceAssessmentsInCourse(courseId);
+        });
+        try {
+            Thread.sleep( 1000);
+        } catch (InterruptedException e){
+            e.printStackTrace();
+        }
+        return mPerformanceAssessmentsInCourse;
+    }
+
+    public Performance getPerformanceAssessmentById(int id){
+        databaseExecutor.execute(()->{
+            mPerformance = mPerformanceDAO.getPerformanceAssessmentById(id);
+        });
+        try {
+            Thread.sleep( 1000);
+        } catch (InterruptedException e){
+            e.printStackTrace();
+        }
+        return mPerformance;
+    }
+
+    public List<Performance> getAllPerformanceAssessments(){
+        databaseExecutor.execute(()->{
+            mAllPerformanceAssessments=mPerformanceDAO.getAllPerformanceAssessments();
+        });
+        try {
+            Thread.sleep( 1000);
+        } catch (InterruptedException e){
+            e.printStackTrace();
+        }
+        return mAllPerformanceAssessments;
     }
 
     //Note--------------------------------------------------

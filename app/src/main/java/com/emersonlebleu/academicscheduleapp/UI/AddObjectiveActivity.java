@@ -1,12 +1,9 @@
 package com.emersonlebleu.academicscheduleapp.UI;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.renderscript.ScriptGroup;
-import android.text.InputType;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -14,11 +11,11 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.emersonlebleu.academicscheduleapp.Database.Repository;
-import com.emersonlebleu.academicscheduleapp.Entity.Assessment;
 import com.emersonlebleu.academicscheduleapp.Entity.Course;
-import com.emersonlebleu.academicscheduleapp.Entity.Note;
-import com.emersonlebleu.academicscheduleapp.Entity.Term;
+import com.emersonlebleu.academicscheduleapp.Entity.Objective;
 import com.emersonlebleu.academicscheduleapp.R;
 
 import java.sql.Date;
@@ -26,59 +23,47 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
+
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-public class AddAssessmentActivity extends AppCompatActivity {
-    int courseId;
-
+public class AddObjectiveActivity extends AppCompatActivity {
     EditText assessmentTitleField;
     EditText startDateField;
-    EditText endDateField;
-    Spinner typeField;
+    EditText scoreField;
     Spinner courseIdField;
 
+    int id;
     String title;
     String startDate;
-    String endDate;
+    Integer score;
     String type;
+    int courseId;
 
     String pathDeterminer;
 
     DatePickerDialog.OnDateSetListener start;
-    DatePickerDialog.OnDateSetListener end;
-
     final Calendar calendarStart = Calendar.getInstance();
-    final Calendar calendarEnd = Calendar.getInstance();
-
     String dtFormat = "MM/dd/yyyy";
     SimpleDateFormat format = new SimpleDateFormat(dtFormat, Locale.US);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_assessment);
+        setContentView(R.layout.activity_add_objective_assessment);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         pathDeterminer = MainActivity.rootList;
 
-        assessmentTitleField = findViewById(R.id.addAssessmentTitleField);
-        startDateField = findViewById(R.id.addAssessmentStartField);
-        endDateField = findViewById(R.id.addAssessmentEndField);
-        typeField = findViewById(R.id.addAssessmentTypeField);
-        courseIdField = findViewById(R.id.addCourseOfAssessmentField);
+        assessmentTitleField = findViewById(R.id.objectiveTitleField);
+        startDateField = findViewById(R.id.objectiveStartField);
+        scoreField = findViewById(R.id.detailsScore);
+        courseIdField = findViewById(R.id.courseOfObjectiveField);
 
         courseId = getIntent().getIntExtra("courseId", -1);
-
-
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.type_array, android.R.layout.simple_spinner_dropdown_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        typeField.setAdapter(adapter);
 
         //Setting Course Id Spinner
         Repository repo = new Repository(getApplication());
@@ -114,7 +99,7 @@ public class AddAssessmentActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
-                new DatePickerDialog(AddAssessmentActivity.this, start, calendarStart.get(Calendar.YEAR), calendarStart.get(Calendar.MONTH), calendarStart.get(Calendar.DAY_OF_MONTH)).show();
+                new DatePickerDialog(AddObjectiveActivity.this, start, calendarStart.get(Calendar.YEAR), calendarStart.get(Calendar.MONTH), calendarStart.get(Calendar.DAY_OF_MONTH)).show();
             }
         });
 
@@ -127,36 +112,6 @@ public class AddAssessmentActivity extends AppCompatActivity {
                 updateLabelStart();
             }
         };
-
-        //END DATE PICKER -------------------------------------------------------------------------
-        endDateField.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Date date;
-
-                String tempEndDate = endDateField.getText().toString();
-                if (tempEndDate.equals("")) tempEndDate = LocalDate.now().plus(1, ChronoUnit.WEEKS).format(DateTimeFormatter.ofPattern("MM/dd/yyyy"));
-                System.out.println(tempEndDate);
-
-                try {
-                    calendarEnd.setTime(format.parse(tempEndDate));
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-
-                new DatePickerDialog(AddAssessmentActivity.this, end, calendarEnd.get(Calendar.YEAR), calendarEnd.get(Calendar.MONTH), calendarEnd.get(Calendar.DAY_OF_MONTH)).show();
-            }
-        });
-
-        end = new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker datePicker, int year, int monthOfYear, int dayOfMonth) {
-                calendarEnd.set(Calendar.YEAR, year);
-                calendarEnd.set(Calendar.MONTH, monthOfYear);
-                calendarEnd.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                updateLabelEnd();
-            }
-        };
     }
 
     public boolean onOptionsItemSelected(MenuItem item){
@@ -164,7 +119,7 @@ public class AddAssessmentActivity extends AppCompatActivity {
             Repository repo = new Repository(getApplication());
             Course current = repo.getCourseById(courseId);
 
-            Intent intent = new Intent(AddAssessmentActivity.this, CourseDetails.class);
+            Intent intent = new Intent(AddObjectiveActivity.this, CourseDetails.class);
             intent.putExtra("id", courseId);
             intent.putExtra("termId", current.getTermId());
             intent.putExtra("title", current.getTitle());
@@ -177,23 +132,22 @@ public class AddAssessmentActivity extends AppCompatActivity {
 
             startActivity(intent);
         } else {
-            Intent intent = new Intent(AddAssessmentActivity.this, ListView.class);
+            Intent intent = new Intent(AddObjectiveActivity.this, ListView.class);
             startActivity(intent);
         }
         return true;
     }
 
-    public void saveNewAssessment(View view) {
+    public void saveNewObjective(View view) {
         title = assessmentTitleField.getText().toString();
         startDate = startDateField.getText().toString();
-        endDate = endDateField.getText().toString();
-        type = typeField.getSelectedItem().toString().toUpperCase();
+        score = Integer.parseInt(scoreField.getText().toString());
         courseId = Integer.parseInt(courseIdField.getSelectedItem().toString());
 
-        Assessment newAssessment = new Assessment(title, startDate, endDate, Assessment.Type.valueOf(type), courseId);
+        Objective newObjective = new Objective(id, title, startDate, courseId, score);
 
         Repository repo = new Repository(getApplication());
-        repo.insert(newAssessment);
+        repo.insert(newObjective);
 
         onBackPressed();
     }
@@ -202,7 +156,4 @@ public class AddAssessmentActivity extends AppCompatActivity {
         startDateField.setText(format.format(calendarStart.getTime()));
     }
 
-    private void updateLabelEnd(){
-        endDateField.setText(format.format(calendarEnd.getTime()));
-    }
 }

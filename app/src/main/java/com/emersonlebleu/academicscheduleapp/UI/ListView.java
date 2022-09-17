@@ -16,9 +16,12 @@ import com.emersonlebleu.academicscheduleapp.Adapters.TermAdapter;
 import com.emersonlebleu.academicscheduleapp.Database.Repository;
 import com.emersonlebleu.academicscheduleapp.Entity.Assessment;
 import com.emersonlebleu.academicscheduleapp.Entity.Course;
+import com.emersonlebleu.academicscheduleapp.Entity.Objective;
+import com.emersonlebleu.academicscheduleapp.Entity.Performance;
 import com.emersonlebleu.academicscheduleapp.Entity.Term;
 import com.emersonlebleu.academicscheduleapp.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ListView extends AppCompatActivity {
@@ -57,7 +60,13 @@ public class ListView extends AppCompatActivity {
         } else if (rootList.equals("Assessment")) {
             RecyclerView recyclerView = findViewById(R.id.rootRecyclerView);
             Repository repo = new Repository(getApplication());
-            List<Assessment> assessments = repo.getAllAssessments();
+
+            List<Objective> objectives = repo.getAllObjectiveAssessments();
+            List<Performance> performances = repo.getAllPerformanceAssessments();
+            List<Assessment> assessments = new ArrayList<>();
+            assessments.addAll(objectives);
+            assessments.addAll(performances);
+
             final AssessmentAdapter adapter = new AssessmentAdapter(this, "ListView");
 
             recyclerView.setAdapter(adapter);
@@ -97,7 +106,13 @@ public class ListView extends AppCompatActivity {
         } else if (rootList.equals("Assessment")) {
             RecyclerView recyclerView = findViewById(R.id.rootRecyclerView);
             Repository repo = new Repository(getApplication());
-            List<Assessment> assessments = repo.getAllAssessments();
+
+            List<Objective> objectives = repo.getAllObjectiveAssessments();
+            List<Performance> performances = repo.getAllPerformanceAssessments();
+            List<Assessment> assessments = new ArrayList<>();
+            assessments.addAll(objectives);
+            assessments.addAll(performances);
+
             final AssessmentAdapter adapter = new AssessmentAdapter(this, "ListView");
 
             recyclerView.setAdapter(adapter);
@@ -151,9 +166,12 @@ public class ListView extends AppCompatActivity {
             popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem menuItem) {
-                    if (menuItem != null){
-                        Intent intent=new Intent(ListView.this, AddAssessmentActivity.class);
-                        intent.putExtra("rootList", rootList);
+                    if (menuItem.getTitle().equals("Add Objective Assessment")){
+                        Intent intent=new Intent(ListView.this, AddObjectiveActivity.class);
+                        startActivity(intent);
+                        return true;
+                    } else if (menuItem.getTitle().equals("Add Performance Assessment")){
+                        Intent intent=new Intent(ListView.this, AddPerformanceActivity.class);
                         startActivity(intent);
                         return true;
                     }

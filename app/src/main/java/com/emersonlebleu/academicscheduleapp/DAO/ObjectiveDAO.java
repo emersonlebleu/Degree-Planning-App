@@ -24,11 +24,11 @@ public interface ObjectiveDAO {
     void delete(Objective objective);
 
     @Query("SELECT * FROM objectiveAssessments")
-    List<Assessment> getAllObjectiveAssessments();
+    List<Objective> getAllObjectiveAssessments();
 
     @Query("SELECT * from objectiveAssessments WHERE courseId LIKE :courseId")
-    List<Assessment> getObjectiveAssessmentsInCourse(int courseId);
+    List<Objective> getObjectiveAssessmentsInCourse(int courseId);
 
     @Query("SELECT * FROM objectiveAssessments WHERE id LIKE :id")
-    Assessment getObjectiveAssessmentById(int id);
+    Objective getObjectiveAssessmentById(int id);
 }

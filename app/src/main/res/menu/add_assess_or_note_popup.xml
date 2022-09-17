@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/addAssessment"
-        android:title="Add Assessment" />
-
+    <item android:id="@+id/addObjectiveAssessment"
+        android:title="Add Objective Assessment" />
+    <item android:id="@+id/addPerformanceAssessment"
+        android:title="Add Performance Assessment" />
     <item android:id="@+id/addNote"
         android:title="Add Note" />
 </menu>

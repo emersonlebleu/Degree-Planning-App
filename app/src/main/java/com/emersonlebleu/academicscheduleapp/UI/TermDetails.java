@@ -24,6 +24,8 @@ import com.emersonlebleu.academicscheduleapp.Database.Repository;
 import com.emersonlebleu.academicscheduleapp.Entity.Assessment;
 import com.emersonlebleu.academicscheduleapp.Entity.Course;
 import com.emersonlebleu.academicscheduleapp.Entity.Note;
+import com.emersonlebleu.academicscheduleapp.Entity.Objective;
+import com.emersonlebleu.academicscheduleapp.Entity.Performance;
 import com.emersonlebleu.academicscheduleapp.Entity.Term;
 import com.emersonlebleu.academicscheduleapp.R;
 
@@ -33,6 +35,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
@@ -225,10 +228,20 @@ public class TermDetails extends AppCompatActivity {
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 for (Course course: courses){
                                     List<Note> notes = repo.getNotesInCourse(course.getId());
-                                    List<Assessment> assessments = repo.getAssessmentsInCourse(course.getId());
+                                    List<Objective> objectives = repo.getObjectiveAssessmentsInCourse(course.getId());
+                                    List<Performance> performances = repo.getPerformanceAssessmentsInCourse(course.getId());
+                                    List<Assessment> assessments = new ArrayList<>();
+                                    assessments.addAll(objectives);
+                                    assessments.addAll(performances);
 
                                     for (Note note: notes){ repo.delete(note); }
-                                    for (Assessment assessment: assessments){ repo.delete(assessment); }
+                                    for (Assessment assessment: assessments){
+                                        if (assessment.getClass() == Objective.class){
+                                            repo.delete((Objective) assessment);
+                                        } else if (assessment.getClass() == Performance.class){
+                                            repo.delete((Performance) assessment);
+                                        }
+                                    }
                                     repo.delete(course);
 
                                     //Reload Recycler

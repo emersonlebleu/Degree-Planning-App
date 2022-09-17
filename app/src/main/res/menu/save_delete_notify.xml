@@ -13,13 +13,6 @@
             <item android:id="@+id/deleteOption"
                 android:title="Delete"
                 app:showAsAction="ifRoom"/>
-
-            <item android:id="@+id/notifyOptionStart"
-                android:title="Notify: Start"
-                app:showAsAction="ifRoom"/>
-            <item android:id="@+id/notifyOptionEnd"
-                android:title="Notify: End"
-                app:showAsAction="ifRoom"/>
         </menu>
 
     </item>

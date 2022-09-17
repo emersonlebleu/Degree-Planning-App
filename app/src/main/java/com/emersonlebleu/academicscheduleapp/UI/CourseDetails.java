@@ -29,6 +29,8 @@ import com.emersonlebleu.academicscheduleapp.Database.Repository;
 import com.emersonlebleu.academicscheduleapp.Entity.Assessment;
 import com.emersonlebleu.academicscheduleapp.Entity.Course;
 import com.emersonlebleu.academicscheduleapp.Entity.Note;
+import com.emersonlebleu.academicscheduleapp.Entity.Objective;
+import com.emersonlebleu.academicscheduleapp.Entity.Performance;
 import com.emersonlebleu.academicscheduleapp.Entity.Term;
 import com.emersonlebleu.academicscheduleapp.R;
 
@@ -121,7 +123,13 @@ public class CourseDetails extends AppCompatActivity {
         RecyclerView assessmentsOnCourseView = findViewById(R.id.assessmentsRecyclerView);
 
         Repository repo = new Repository(getApplication());
-        List<Assessment> assessments = repo.getAssessmentsInCourse(id);
+
+        List<Objective> objectives = repo.getObjectiveAssessmentsInCourse(id);
+        List<Performance> performances = repo.getPerformanceAssessmentsInCourse(id);
+        List<Assessment> assessments = new ArrayList<>();
+        assessments.addAll(objectives);
+        assessments.addAll(performances);
+
         final AssessmentAdapter adapter = new AssessmentAdapter(this, "CourseDetails");
 
         assessmentsOnCourseView.setAdapter(adapter);
@@ -209,7 +217,13 @@ public class CourseDetails extends AppCompatActivity {
         RecyclerView assessmentsOnCourseView = findViewById(R.id.assessmentsRecyclerView);
 
         Repository repo = new Repository(getApplication());
-        List<Assessment> assessments = repo.getAssessmentsInCourse(id);
+
+        List<Objective> objectives = repo.getObjectiveAssessmentsInCourse(id);
+        List<Performance> performances = repo.getPerformanceAssessmentsInCourse(id);
+        List<Assessment> assessments = new ArrayList<>();
+        assessments.addAll(objectives);
+        assessments.addAll(performances);
+
         final AssessmentAdapter adapter = new AssessmentAdapter(this, "CourseDetails");
 
         assessmentsOnCourseView.setAdapter(adapter);
@@ -252,7 +266,12 @@ public class CourseDetails extends AppCompatActivity {
         } else if (itemId == R.id.deleteOption){
             Repository repo = new Repository(getApplication());
             List<Note> notes = repo.getNotesInCourse(id);
-            List<Assessment> assessments = repo.getAssessmentsInCourse(id);
+
+            List<Objective> objectives = repo.getObjectiveAssessmentsInCourse(id);
+            List<Performance> performances = repo.getPerformanceAssessmentsInCourse(id);
+            List<Assessment> assessments = new ArrayList<>();
+            assessments.addAll(objectives);
+            assessments.addAll(performances);
 
             title = courseTitleField.getText().toString();
             startDate = startDateField.getText().toString();
@@ -279,8 +298,11 @@ public class CourseDetails extends AppCompatActivity {
                                 for (Note note: notes){
                                     repo.delete(note);
                                 }
-                                for (Assessment assessment: assessments){
-                                    repo.delete(assessment);
+                                for (Objective objective: objectives){
+                                    repo.delete(objective);
+                                }
+                                for (Performance performance: performances){
+                                    repo.delete(performance);
                                 }
 
                                 repo.delete(course);
@@ -343,8 +365,11 @@ public class CourseDetails extends AppCompatActivity {
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                for (Assessment assessment: assessments){
-                                    repo.delete(assessment);
+                                for (Objective objective: objectives){
+                                    repo.delete(objective);
+                                }
+                                for (Performance performance: performances){
+                                    repo.delete(performance);
                                 }
 
                                 repo.delete(course);
@@ -400,44 +425,6 @@ public class CourseDetails extends AppCompatActivity {
 
                 startActivity(intent);
             }
-        } else if (itemId == R.id.notifyOptionStart) {
-            String startDt = startDateField.getText().toString();
-            java.util.Date st = null;
-
-            try {
-                st = format.parse(startDt);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-
-            Long stTrigger = st.getTime();
-
-            Intent stIntentCourse = new Intent(CourseDetails.this, NotificationReceiver.class);
-            stIntentCourse.putExtra("key", "Course number " + id + " starts on " + startDt);
-
-            PendingIntent stSenderCourse = PendingIntent.getBroadcast(CourseDetails.this, MainActivity.alertNum++, stIntentCourse, PendingIntent.FLAG_IMMUTABLE);
-
-            AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-            alarmManager.set(AlarmManager.RTC_WAKEUP, stTrigger, stSenderCourse);
-        } else if (itemId == R.id.notifyOptionEnd){
-            String endDt = endDateField.getText().toString();
-            java.util.Date en = null;
-
-            try {
-                en = format.parse(endDt);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-
-            Long enTrigger = en.getTime();
-
-            Intent enIntentCourse = new Intent(CourseDetails.this, NotificationReceiver.class);
-            enIntentCourse.putExtra("key", "Course number " + id + " ends on " + endDt);
-
-            PendingIntent enSenderCourse = PendingIntent.getBroadcast(CourseDetails.this, MainActivity.alertNum++, enIntentCourse, PendingIntent.FLAG_IMMUTABLE);
-
-            AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-            alarmManager.set(AlarmManager.RTC_WAKEUP, enTrigger, enSenderCourse);
         }
         return true;
     }
@@ -450,8 +437,8 @@ public class CourseDetails extends AppCompatActivity {
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
-                if (menuItem.getTitle().equals("Add Assessment")){
-                    Intent intent=new Intent(CourseDetails.this, AddAssessmentActivity.class);
+                if (menuItem.getTitle().equals("Add Objective Assessment")){
+                    Intent intent=new Intent(CourseDetails.this, AddObjectiveActivity.class);
                     intent.putExtra("courseId", id);
                     startActivity(intent);
                     return true;
@@ -459,6 +446,11 @@ public class CourseDetails extends AppCompatActivity {
                     Intent intent = new Intent(CourseDetails.this, AddNoteActivity.class);
                     intent.putExtra("courseId", id);
                     intent.putExtra("noteParent", "courseDetails");
+                    startActivity(intent);
+                    return true;
+                } else if (menuItem.getTitle().equals("Add Performance Assessment")){
+                    Intent intent=new Intent(CourseDetails.this, AddPerformanceActivity.class);
+                    intent.putExtra("courseId", id);
                     startActivity(intent);
                     return true;
                 }

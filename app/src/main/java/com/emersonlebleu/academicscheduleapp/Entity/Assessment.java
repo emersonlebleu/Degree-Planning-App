@@ -6,6 +6,7 @@ import androidx.room.PrimaryKey;
 
 
 public abstract class Assessment {
+    @PrimaryKey(autoGenerate = true)
     private int id;
     private String title;
     private String startDate;

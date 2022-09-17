@@ -5,39 +5,28 @@ import androidx.room.Ignore;
 
 @Entity(tableName = "performanceAssessments")
 public class Performance extends Assessment{
-    private String goalCompleteDate;
-    private String completeDate;
+    private String endDate;
     private Integer percentageComplete;
 
     @Ignore
-    public Performance(int id, String title, String startDate, int courseId, String goalCompleteDate, String completeDate, Integer percentageComplete) {
+    public Performance(int id, String title, String startDate, int courseId, String endDate, Integer percentageComplete) {
         super(id, title, startDate, courseId);
-        this.goalCompleteDate = goalCompleteDate;
+        this.endDate = endDate;
         this.percentageComplete = percentageComplete;
-        this.completeDate = completeDate;
     }
 
-    public Performance(String title, String startDate, int courseId, String goalCompleteDate, String completeDate, Integer percentageComplete) {
+    public Performance(String title, String startDate, int courseId, String endDate, Integer percentageComplete) {
         super(title, startDate, courseId);
-        this.goalCompleteDate = goalCompleteDate;
+        this.endDate = endDate;
         this.percentageComplete = percentageComplete;
-        this.completeDate = completeDate;
     }
 
-    public String getGoalCompleteDate() {
-        return goalCompleteDate;
+    public String getEndDate() {
+        return endDate;
     }
 
-    public void setGoalCompleteDate(String goalCompleteDate) {
-        this.goalCompleteDate = goalCompleteDate;
-    }
-
-    public String getCompleteDate() {
-        return completeDate;
-    }
-
-    public void setCompleteDate(String completeDate) {
-        this.completeDate = completeDate;
+    public void setEndDate(String goalCompleteDate) {
+        this.endDate = endDate;
     }
 
     public Integer getPercentageComplete() {

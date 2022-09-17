@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/addAssessment"
-        android:title="Add Assessment" />
+    <item android:id="@+id/addObjectiveAssessment"
+        android:title="Add Objective Assessment" />
+    <item android:id="@+id/addPerformanceAssessment"
+        android:title="Add Performance Assessment" />
 </menu>

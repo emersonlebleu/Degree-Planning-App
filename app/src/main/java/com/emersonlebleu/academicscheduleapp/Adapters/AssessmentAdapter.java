@@ -11,8 +11,11 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.emersonlebleu.academicscheduleapp.Entity.Assessment;
+import com.emersonlebleu.academicscheduleapp.Entity.Objective;
+import com.emersonlebleu.academicscheduleapp.Entity.Performance;
 import com.emersonlebleu.academicscheduleapp.R;
-import com.emersonlebleu.academicscheduleapp.UI.AssessmentDetails;
+import com.emersonlebleu.academicscheduleapp.UI.ObjectiveDetails;
+import com.emersonlebleu.academicscheduleapp.UI.PerformanceDetails;
 
 import java.util.List;
 
@@ -30,15 +33,31 @@ public class AssessmentAdapter extends RecyclerView.Adapter<AssessmentAdapter.As
                     int position = getAdapterPosition();
                     final Assessment current = mAssessments.get(position);
 
-                    Intent intent = new Intent(context, AssessmentDetails.class);
-                    intent.putExtra("id", current.getId());
-                    intent.putExtra("title", current.getTitle());
-                    intent.putExtra("startDate", current.getStartDate());
-                    intent.putExtra("endDate", current.getEndDate());
-                    intent.putExtra("type", current.getType().toString());
-                    intent.putExtra("courseId", current.getCourseId());
-                    intent.putExtra("parent", parent);
-                    context.startActivity(intent);
+                    if (current.getClass() == Objective.class){
+                        Intent intent = new Intent(context, ObjectiveDetails.class);
+                        intent.putExtra("id", current.getId());
+                        intent.putExtra("title", current.getTitle());
+                        intent.putExtra("startDate", current.getStartDate());
+                        intent.putExtra("score", ((Objective) current).getScore());
+
+                        intent.putExtra("type", "OBJECTIVE");
+                        intent.putExtra("courseId", current.getCourseId());
+                        intent.putExtra("parent", parent);
+                        context.startActivity(intent);
+
+                    } else if (current.getClass() == Performance.class){
+                        Intent intent = new Intent(context, PerformanceDetails.class);
+                        intent.putExtra("id", current.getId());
+                        intent.putExtra("title", current.getTitle());
+                        intent.putExtra("startDate", current.getStartDate());
+                        intent.putExtra("endDate", ((Performance) current).getEndDate());
+
+                        intent.putExtra("percentComplete", ((Performance) current).getPercentageComplete());
+                        intent.putExtra("type", "PERFORMANCE");
+                        intent.putExtra("courseId", current.getCourseId());
+                        intent.putExtra("parent", parent);
+                        context.startActivity(intent);
+                    }
                 }
             });
         }
