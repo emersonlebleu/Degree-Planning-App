@@ -29,16 +29,6 @@ public class NotesList extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         courseId = getIntent().getIntExtra("courseId", -1);
-
-        RecyclerView recyclerView = findViewById(R.id.notesRecyclerView);
-        Repository repo = new Repository(getApplication());
-        List<Note> notes = repo.getNotesInCourse(courseId);
-        final NoteAdapter adapter = new NoteAdapter(this);
-
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        adapter.setNotes(notes);
     }
 
     @Override

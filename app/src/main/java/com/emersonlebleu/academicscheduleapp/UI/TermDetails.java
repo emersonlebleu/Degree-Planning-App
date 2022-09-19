@@ -85,17 +85,6 @@ public class TermDetails extends AppCompatActivity {
         endDateField.setText(endDate);
         termIdField.setText(String.valueOf(id));
 
-        //Setting up the scroll view population
-        RecyclerView coursesOnTermView = findViewById(R.id.coursesInTermContainer);
-
-        Repository repo = new Repository(getApplication());
-        List<Course> courses = repo.getCoursesInTerm(id);
-        final CourseAdapter adapter = new CourseAdapter(this, "TermDetails");
-
-        coursesOnTermView.setAdapter(adapter);
-        coursesOnTermView.setLayoutManager(new LinearLayoutManager(this));
-        adapter.setCourses(courses);
-
         thisContext = this;
 
         //START DATE PICKER ----------------------------------------------------------------

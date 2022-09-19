@@ -35,46 +35,6 @@ public class ListView extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         rootList = MainActivity.rootList;
-
-        if (rootList.equals("Term")){
-            RecyclerView recyclerView = findViewById(R.id.rootRecyclerView);
-            Repository repo = new Repository(getApplication());
-            List<Term> terms = repo.getAllTerms();
-            final TermAdapter adapter = new TermAdapter(this);
-
-            recyclerView.setAdapter(adapter);
-            recyclerView.setLayoutManager(new LinearLayoutManager(this));
-            adapter.setTerms(terms);
-            setTitle("All Terms");
-        } else if (rootList.equals("Course")){
-            RecyclerView recyclerView = findViewById(R.id.rootRecyclerView);
-            Repository repo = new Repository(getApplication());
-            List<Course> courses = repo.getAllCourses();
-            final CourseAdapter adapter = new CourseAdapter(this, "ListView");
-
-            recyclerView.setAdapter(adapter);
-            recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-            adapter.setCourses(courses);
-            setTitle("All Courses");
-        } else if (rootList.equals("Assessment")) {
-            RecyclerView recyclerView = findViewById(R.id.rootRecyclerView);
-            Repository repo = new Repository(getApplication());
-
-            List<Objective> objectives = repo.getAllObjectiveAssessments();
-            List<Performance> performances = repo.getAllPerformanceAssessments();
-            List<Assessment> assessments = new ArrayList<>();
-            assessments.addAll(objectives);
-            assessments.addAll(performances);
-
-            final AssessmentAdapter adapter = new AssessmentAdapter(this, "ListView");
-
-            recyclerView.setAdapter(adapter);
-            recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-            adapter.setAssessments(assessments);
-            setTitle("All Assessments");
-        }
     }
 
     @Override
