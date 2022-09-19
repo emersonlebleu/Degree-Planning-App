@@ -63,7 +63,7 @@ public class PerformanceDetails extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_objective_assessment_details);
+        setContentView(R.layout.performance_assessment_details);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
