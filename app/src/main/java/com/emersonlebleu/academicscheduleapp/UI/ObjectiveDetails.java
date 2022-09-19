@@ -79,7 +79,7 @@ public class ObjectiveDetails extends AppCompatActivity {
 
         assessmentTitleField.setText(title);
         startDateField.setText(startDate);
-        scoreField.setText(score);
+        scoreField.setText(String.valueOf(score));
 
         //Setting Course Id Spinner
         Repository repo = new Repository(getApplication());

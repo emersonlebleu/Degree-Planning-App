@@ -123,19 +123,19 @@ public class CourseDetails extends AppCompatActivity {
         RecyclerView assessmentsOnCourseView = findViewById(R.id.assessmentsRecyclerView);
 
         Repository repo = new Repository(getApplication());
-
-        List<Objective> objectives = repo.getObjectiveAssessmentsInCourse(id);
-        List<Performance> performances = repo.getPerformanceAssessmentsInCourse(id);
-        List<Assessment> assessments = new ArrayList<>();
-
-        assessments.addAll(objectives);
-        assessments.addAll(performances);
-
-        final AssessmentAdapter adapter = new AssessmentAdapter(this, "CourseDetails");
-
-        assessmentsOnCourseView.setAdapter(adapter);
-        assessmentsOnCourseView.setLayoutManager(new LinearLayoutManager(this));
-        adapter.setAssessments(assessments);
+//
+//        List<Objective> objectives = repo.getObjectiveAssessmentsInCourse(id);
+//        List<Performance> performances = repo.getPerformanceAssessmentsInCourse(id);
+//        List<Assessment> assessments = new ArrayList<>();
+//
+//        assessments.addAll(objectives);
+//        assessments.addAll(performances);
+//
+//        final AssessmentAdapter adapter = new AssessmentAdapter(this, "CourseDetails");
+//
+//        assessmentsOnCourseView.setAdapter(adapter);
+//        assessmentsOnCourseView.setLayoutManager(new LinearLayoutManager(this));
+//        adapter.setAssessments(assessments);
 
         //Setting Term Id Spinner
         List<Integer> termIdArray = new ArrayList<>();
