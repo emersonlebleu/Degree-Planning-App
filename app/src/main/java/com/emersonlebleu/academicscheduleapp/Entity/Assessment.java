@@ -5,7 +5,7 @@ import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 
-public abstract class Assessment {
+public class Assessment {
     @PrimaryKey(autoGenerate = true)
     private int id;
     private String title;

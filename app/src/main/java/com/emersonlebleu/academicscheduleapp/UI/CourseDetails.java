@@ -127,6 +127,7 @@ public class CourseDetails extends AppCompatActivity {
         List<Objective> objectives = repo.getObjectiveAssessmentsInCourse(id);
         List<Performance> performances = repo.getPerformanceAssessmentsInCourse(id);
         List<Assessment> assessments = new ArrayList<>();
+
         assessments.addAll(objectives);
         assessments.addAll(performances);
 
@@ -212,7 +213,6 @@ public class CourseDetails extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-
         //Setting up the scroll view population
         RecyclerView assessmentsOnCourseView = findViewById(R.id.assessmentsRecyclerView);
 

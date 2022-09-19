@@ -64,11 +64,11 @@ public class AddPerformanceActivity extends AppCompatActivity {
 
         pathDeterminer = MainActivity.rootList;
 
-        assessmentTitleField = findViewById(R.id.performanceTitleField);
-        startDateField = findViewById(R.id.performanceStartField);
-        endDateField = findViewById(R.id.performanceEndField);
-        percentCompleteField = findViewById(R.id.percentComplete);
-        courseIdField = findViewById(R.id.courseOfPerformanceField);
+        assessmentTitleField = findViewById(R.id.addPerformanceTitleField);
+        startDateField = findViewById(R.id.addPerformanceStartField);
+        endDateField = findViewById(R.id.addPerformanceEndField);
+        percentCompleteField = findViewById(R.id.addPercentComplete);
+        courseIdField = findViewById(R.id.addCourseOfPerformanceField);
 
         courseId = getIntent().getIntExtra("courseId", -1);
 

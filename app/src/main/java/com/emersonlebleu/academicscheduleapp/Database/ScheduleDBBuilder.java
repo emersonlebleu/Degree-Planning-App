@@ -17,7 +17,7 @@ import com.emersonlebleu.academicscheduleapp.Entity.Objective;
 import com.emersonlebleu.academicscheduleapp.Entity.Performance;
 import com.emersonlebleu.academicscheduleapp.Entity.Term;
 
-@Database(entities = {Term.class, Course.class, Objective.class, Performance.class, Note.class}, version = 19, exportSchema = false)
+@Database(entities = {Term.class, Course.class, Objective.class, Performance.class, Note.class}, version = 20, exportSchema = false)
 public abstract class ScheduleDBBuilder extends RoomDatabase {
     public abstract TermDAO termDAO();
     public abstract CourseDAO courseDAO();

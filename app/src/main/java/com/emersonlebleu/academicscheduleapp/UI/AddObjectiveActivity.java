@@ -58,10 +58,10 @@ public class AddObjectiveActivity extends AppCompatActivity {
 
         pathDeterminer = MainActivity.rootList;
 
-        assessmentTitleField = findViewById(R.id.objectiveTitleField);
-        startDateField = findViewById(R.id.objectiveStartField);
-        scoreField = findViewById(R.id.detailsScore);
-        courseIdField = findViewById(R.id.courseOfObjectiveField);
+        assessmentTitleField = findViewById(R.id.addObjectiveTitleField);
+        startDateField = findViewById(R.id.addObjectiveStartField);
+        scoreField = findViewById(R.id.addScore);
+        courseIdField = findViewById(R.id.addCourseOfObjectiveField);
 
         courseId = getIntent().getIntExtra("courseId", -1);
 
