@@ -85,7 +85,7 @@ public class PerformanceDetails extends AppCompatActivity {
         assessmentTitleField.setText(title);
         startDateField.setText(startDate);
         endDateField.setText(endDate);
-        percentCompleteField.setText(percentComplete);
+        percentCompleteField.setText(String.valueOf(percentComplete));
 
         //Setting Course Id Spinner
         Repository repo = new Repository(getApplication());
