@@ -187,18 +187,25 @@ public class TermDetails extends AppCompatActivity {
             startDate = startDateField.getText().toString();
             endDate = endDateField.getText().toString();
 
-            Term term = new Term(id, title, startDate, endDate);
+            if (LocalDate.parse(endDate, DateTimeFormatter.ofPattern(dtFormat))
+                    .isBefore(LocalDate.parse(startDate, DateTimeFormatter.ofPattern(dtFormat)))){
+                new AlertDialog.Builder(this).setTitle("Date Error")
+                        .setMessage("End date is before the start date please correct this.")
+                        .setPositiveButton("Okay", null).show();
+            } else {
+                Term term = new Term(id, title, startDate, endDate);
 
-            Repository repo = new Repository(getApplication());
-            repo.update(term);
+                Repository repo = new Repository(getApplication());
+                repo.update(term);
 
-            //The Toast functionality
-            Context context = getApplicationContext();
-            String text = "Saved!";
-            int duration = Toast.LENGTH_SHORT;
+                //The Toast functionality
+                Context context = getApplicationContext();
+                String text = "Saved!";
+                int duration = Toast.LENGTH_SHORT;
 
-            Toast toast = Toast.makeText(context, text, duration);
-            toast.show();
+                Toast toast = Toast.makeText(context, text, duration);
+                toast.show();
+            }
         } else if (itemId == R.id.deleteOption){
             title = termTitleField.getText().toString();
             startDate = startDateField.getText().toString();
