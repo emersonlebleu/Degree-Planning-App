@@ -10,8 +10,15 @@ import com.emersonlebleu.academicscheduleapp.Database.Repository;
 import com.emersonlebleu.academicscheduleapp.Entity.Assessment;
 import com.emersonlebleu.academicscheduleapp.Entity.Course;
 import com.emersonlebleu.academicscheduleapp.Entity.Note;
+import com.emersonlebleu.academicscheduleapp.Entity.Objective;
+import com.emersonlebleu.academicscheduleapp.Entity.Performance;
 import com.emersonlebleu.academicscheduleapp.Entity.Term;
 import com.emersonlebleu.academicscheduleapp.R;
+
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     public static String rootList;
@@ -83,5 +90,43 @@ public class MainActivity extends AppCompatActivity {
         rootList = "Course";
         Intent intent = new Intent(MainActivity.this, ListView.class);
         startActivity(intent);
+    }
+
+    public void generateAndShare(View view) {
+        Repository repo = new Repository(getApplication());
+        LocalDateTime reportDate = LocalDateTime.now();
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm:ss");
+
+        String formatReportDate = reportDate.format(formatter);
+
+        List<Term> terms = repo.getAllTerms();
+        String report = "Generated on: " + formatReportDate + "\n";
+
+        for (Term term: terms){
+            report += "\nTerm ID #: " + term.getId() + " | " + term.getTitle() + " | Start: " + term.getStartDate() + " | End: " + term.getEndDate() + "\n";
+            List<Course> coursesInTerm = repo.getCoursesInTerm(term.getId());
+            for (Course course: coursesInTerm){
+                report += "    Course ID #: " + course.getId() + " | " + course.getTitle() + " | Start: " + course.getStartDate() + " | End: " + course.getEndDate() + "\n";
+                List<Objective> objInCourse = repo.getObjectiveAssessmentsInCourse(course.getId());
+                List<Performance> perfInCourse = repo.getPerformanceAssessmentsInCourse(course.getId());
+                for (Objective obj: objInCourse){
+                    report += "          Obj Assessment ID #: " + obj.getId() + " | " + obj.getTitle() + " | Date: " + obj.getStartDate() + " | Score: " + obj.getScore() + "\n";
+                }
+                for (Performance perf: perfInCourse){
+                    report += "          Perf Assessment ID #: " + perf.getId() + " | " + perf.getTitle() + " | Date: " + perf.getStartDate() + " | End: " + perf.getEndDate() + " | % Complete: " + perf.getPercentageComplete() + "%" + "\n";
+                }
+            }
+        }
+
+
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, report);
+        sendIntent.putExtra(Intent.EXTRA_TITLE, "Degree Plan Report: " + formatReportDate);
+        sendIntent.putExtra(Intent.EXTRA_SUBJECT, "Degree Plan Report - generated on: " + formatReportDate);
+        sendIntent.setType("text/plain");
+        Intent shareIntent = Intent.createChooser(sendIntent, null);
+        startActivity(shareIntent);
     }
 }
