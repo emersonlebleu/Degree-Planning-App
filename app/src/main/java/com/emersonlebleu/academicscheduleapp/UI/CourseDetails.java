@@ -241,15 +241,30 @@ public class CourseDetails extends AppCompatActivity {
             Course course = new Course(id, title, startDate, endDate, Course.Status.valueOf(status), instructorName, instructorPhone, instructorEmail, termId);
 
             Repository repo = new Repository(getApplication());
-            repo.update(course);
+            Term term = repo.getTermById(termId);
+            LocalDate termStartDate = LocalDate.parse(term.getStartDate(), DateTimeFormatter.ofPattern(dtFormat));
+            LocalDate termEndDate = LocalDate.parse(term.getEndDate(), DateTimeFormatter.ofPattern(dtFormat));
 
-            //The Toast functionality
-            Context context = getApplicationContext();
-            String text = "Saved!";
-            int duration = Toast.LENGTH_SHORT;
+            if (LocalDate.parse(endDate, DateTimeFormatter.ofPattern(dtFormat))
+                    .isBefore(LocalDate.parse(startDate, DateTimeFormatter.ofPattern(dtFormat)))){
+                new AlertDialog.Builder(this).setTitle("Date Error")
+                        .setMessage("End date is before the start date please correct this.")
+                        .setPositiveButton("Okay", null).show();
+            } else if (LocalDate.parse(startDate, DateTimeFormatter.ofPattern(dtFormat)).isBefore(termStartDate) || LocalDate.parse(endDate, DateTimeFormatter.ofPattern(dtFormat)).isAfter(termEndDate)) {
+                new AlertDialog.Builder(this).setTitle("Date Error")
+                        .setMessage("Course dates must be within specified term ("+ termStartDate.format(DateTimeFormatter.ofPattern(dtFormat)) + " - "+ termEndDate.format(DateTimeFormatter.ofPattern(dtFormat)) +"). Please correct this.")
+                        .setPositiveButton("Okay", null).show();
+            } else {
+                repo.update(course);
 
-            Toast toast = Toast.makeText(context, text, duration);
-            toast.show();
+                //The Toast functionality
+                Context context = getApplicationContext();
+                String text = "Saved!";
+                int duration = Toast.LENGTH_SHORT;
+
+                Toast toast = Toast.makeText(context, text, duration);
+                toast.show();
+            }
         } else if (itemId == R.id.deleteOption){
             Repository repo = new Repository(getApplication());
             List<Note> notes = repo.getNotesInCourse(id);
