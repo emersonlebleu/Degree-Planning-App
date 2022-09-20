@@ -1,6 +1,7 @@
 package com.emersonlebleu.academicscheduleapp.UI;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.emersonlebleu.academicscheduleapp.Database.Repository;
 import com.emersonlebleu.academicscheduleapp.Entity.Course;
 import com.emersonlebleu.academicscheduleapp.Entity.Objective;
+import com.emersonlebleu.academicscheduleapp.Entity.Term;
 import com.emersonlebleu.academicscheduleapp.R;
 
 import java.sql.Date;
@@ -141,15 +143,30 @@ public class AddObjectiveActivity extends AppCompatActivity {
     public void saveNewObjective(View view) {
         title = assessmentTitleField.getText().toString();
         startDate = startDateField.getText().toString();
-        score = Integer.parseInt(scoreField.getText().toString());
         courseId = Integer.parseInt(courseIdField.getSelectedItem().toString());
+
+        if (scoreField.getText().toString().equals("")){
+            score = 0;
+        } else {
+            score = Integer.parseInt(scoreField.getText().toString());
+        }
 
         Objective newObjective = new Objective(id, title, startDate, courseId, score);
 
         Repository repo = new Repository(getApplication());
-        repo.insert(newObjective);
+        Course course = repo.getCourseById(courseId);
+        LocalDate courseStartDate = LocalDate.parse(course.getStartDate(), DateTimeFormatter.ofPattern(dtFormat));
+        LocalDate courseEndDate = LocalDate.parse(course.getEndDate(), DateTimeFormatter.ofPattern(dtFormat));
 
-        onBackPressed();
+        if (LocalDate.parse(startDate, DateTimeFormatter.ofPattern(dtFormat)).isBefore(courseStartDate)
+                || LocalDate.parse(startDate, DateTimeFormatter.ofPattern(dtFormat)).isAfter(courseEndDate)) {
+            new AlertDialog.Builder(this).setTitle("Date Error")
+                    .setMessage("Assessment date must be within course timeframe ("+ courseStartDate.format(DateTimeFormatter.ofPattern(dtFormat)) + " - "+ courseEndDate.format(DateTimeFormatter.ofPattern(dtFormat)) +"). Please correct this.")
+                    .setPositiveButton("Okay", null).show();
+        } else {
+            repo.insert(newObjective);
+            onBackPressed();
+        }
     }
 
     private void updateLabelStart(){

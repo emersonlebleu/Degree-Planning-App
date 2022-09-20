@@ -2,6 +2,7 @@ package com.emersonlebleu.academicscheduleapp.UI;
 
 import android.app.Activity;
 import android.app.AlarmManager;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -143,20 +144,36 @@ public class ObjectiveDetails extends AppCompatActivity {
             Objective newObjective = new Objective(id, title, startDate, courseId, score);
 
             Repository repo = new Repository(getApplication());
-            repo.update(newObjective);
+            Course course = repo.getCourseById(courseId);
+            LocalDate courseStartDate = LocalDate.parse(course.getStartDate(), DateTimeFormatter.ofPattern(dtFormat));
+            LocalDate courseEndDate = LocalDate.parse(course.getEndDate(), DateTimeFormatter.ofPattern(dtFormat));
 
-            //The Toast functionality
-            Context context = getApplicationContext();
-            String text = "Saved!";
-            int duration = Toast.LENGTH_SHORT;
+            if (LocalDate.parse(startDate, DateTimeFormatter.ofPattern(dtFormat)).isBefore(courseStartDate)
+                    || LocalDate.parse(startDate, DateTimeFormatter.ofPattern(dtFormat)).isAfter(courseEndDate)) {
+                new AlertDialog.Builder(this).setTitle("Date Error")
+                        .setMessage("Assessment date must be within course timeframe ("+ courseStartDate.format(DateTimeFormatter.ofPattern(dtFormat)) + " - "+ courseEndDate.format(DateTimeFormatter.ofPattern(dtFormat)) +"). Please correct this.")
+                        .setPositiveButton("Okay", null).show();
+            } else {
+                repo.update(newObjective);
 
-            Toast toast = Toast.makeText(context, text, duration);
-            toast.show();
+                //The Toast functionality
+                Context context = getApplicationContext();
+                String text = "Saved!";
+                int duration = Toast.LENGTH_SHORT;
+
+                Toast toast = Toast.makeText(context, text, duration);
+                toast.show();
+            }
         } else if (itemId == R.id.deleteOption){
             title = assessmentTitleField.getText().toString();
             startDate = startDateField.getText().toString();
-            score = Integer.parseInt(scoreField.getText().toString());
             courseId = Integer.parseInt(courseIdField.getSelectedItem().toString());
+
+            if (scoreField.getText().toString().equals("")){
+                score = 0;
+            } else {
+                score = Integer.parseInt(scoreField.getText().toString());
+            }
 
             Objective newObjective = new Objective(id, title, startDate, courseId, score);
 

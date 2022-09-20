@@ -250,7 +250,10 @@ public class CourseDetails extends AppCompatActivity {
                 new AlertDialog.Builder(this).setTitle("Date Error")
                         .setMessage("End date is before the start date please correct this.")
                         .setPositiveButton("Okay", null).show();
-            } else if (LocalDate.parse(startDate, DateTimeFormatter.ofPattern(dtFormat)).isBefore(termStartDate) || LocalDate.parse(endDate, DateTimeFormatter.ofPattern(dtFormat)).isAfter(termEndDate)) {
+            } else if (LocalDate.parse(startDate, DateTimeFormatter.ofPattern(dtFormat)).isBefore(termStartDate)
+                    || LocalDate.parse(startDate, DateTimeFormatter.ofPattern(dtFormat)).isAfter(termEndDate)
+                    || LocalDate.parse(endDate, DateTimeFormatter.ofPattern(dtFormat)).isAfter(termEndDate)
+                    || LocalDate.parse(endDate, DateTimeFormatter.ofPattern(dtFormat)).isBefore(termStartDate)) {
                 new AlertDialog.Builder(this).setTitle("Date Error")
                         .setMessage("Course dates must be within specified term ("+ termStartDate.format(DateTimeFormatter.ofPattern(dtFormat)) + " - "+ termEndDate.format(DateTimeFormatter.ofPattern(dtFormat)) +"). Please correct this.")
                         .setPositiveButton("Okay", null).show();
