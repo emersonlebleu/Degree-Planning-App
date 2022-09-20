@@ -2,7 +2,9 @@ package com.emersonlebleu.academicscheduleapp.UI;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -129,11 +131,18 @@ public class AddTermActivity extends AppCompatActivity {
         startDate = startDateField.getText().toString();
         endDate = endDateField.getText().toString();
 
-        Term newTerm = new Term(title, startDate, endDate);
+        if (LocalDate.parse(endDate, DateTimeFormatter.ofPattern(dtFormat))
+                .isBefore(LocalDate.parse(startDate, DateTimeFormatter.ofPattern(dtFormat)))){
+            new AlertDialog.Builder(this).setTitle("Date Error")
+                    .setMessage("End date is before the start date please correct this.")
+                    .setPositiveButton("Okay", null).show();
+        } else {
+            Term newTerm = new Term(title, startDate, endDate);
 
-        Repository repo = new Repository(getApplication());
-        repo.insert(newTerm);
+            Repository repo = new Repository(getApplication());
+            repo.insert(newTerm);
 
-        onBackPressed();
+            onBackPressed();
+        }
     }
 }
