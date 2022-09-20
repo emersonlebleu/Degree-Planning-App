@@ -6,6 +6,18 @@
     android:layout_height="match_parent"
     tools:context=".UI.ListView">
 
+    <Button
+        android:id="@+id/allBtn"
+        android:layout_width="71dp"
+        android:layout_height="44dp"
+        android:layout_marginStart="324dp"
+        android:layout_marginTop="4dp"
+        android:backgroundTint="@color/Mandarin"
+        android:onClick="allBtnClick"
+        android:text="all"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floatingActionButton4"
         android:layout_width="60dp"
@@ -26,10 +38,33 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rootRecyclerView"
-        android:layout_width="387dp"
-        android:layout_height="628dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp"
+        android:layout_width="391dp"
+        android:layout_height="591dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="48dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/searchField"
+        android:layout_width="212dp"
+        android:layout_height="39dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
+        android:ems="10"
+        android:hint="Search titles"
+        android:inputType="text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/findBtn"
+        android:layout_width="77dp"
+        android:layout_height="44dp"
+        android:layout_marginStart="228dp"
+        android:layout_marginTop="4dp"
+        android:onClick="findBtnClick"
+        android:text="Find"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
