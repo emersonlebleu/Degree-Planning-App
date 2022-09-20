@@ -2,6 +2,7 @@ package com.emersonlebleu.academicscheduleapp.UI;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -195,9 +196,23 @@ public class AddCourseActivity extends AppCompatActivity {
         Course newCourse = new Course(title, startDate, endDate, Course.Status.valueOf(status), instructorName, instructorPhone, instructorEmail, termId);
 
         Repository repo = new Repository(getApplication());
-        repo.insert(newCourse);
+        Term term = repo.getTermById(termId);
+        LocalDate termStartDate = LocalDate.parse(term.getStartDate(), DateTimeFormatter.ofPattern(dtFormat));
+        LocalDate termEndDate = LocalDate.parse(term.getEndDate(), DateTimeFormatter.ofPattern(dtFormat));
 
-        onBackPressed();
+        if (LocalDate.parse(endDate, DateTimeFormatter.ofPattern(dtFormat))
+                .isBefore(LocalDate.parse(startDate, DateTimeFormatter.ofPattern(dtFormat)))){
+            new AlertDialog.Builder(this).setTitle("Date Error")
+                    .setMessage("End date is before the start date please correct this.")
+                    .setPositiveButton("Okay", null).show();
+        } else if (LocalDate.parse(startDate, DateTimeFormatter.ofPattern(dtFormat)).isBefore(termStartDate) || LocalDate.parse(endDate, DateTimeFormatter.ofPattern(dtFormat)).isAfter(termEndDate)) {
+            new AlertDialog.Builder(this).setTitle("Date Error")
+                    .setMessage("Course dates must be within specified term ("+ termStartDate.format(DateTimeFormatter.ofPattern(dtFormat)) + " - "+ termEndDate.format(DateTimeFormatter.ofPattern(dtFormat)) +"). Please correct this.")
+                    .setPositiveButton("Okay", null).show();
+        } else {
+            repo.insert(newCourse);
+            onBackPressed();
+        }
     }
 
     private void updateLabelStart(){
