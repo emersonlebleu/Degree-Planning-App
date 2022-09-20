@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
 import android.app.AlarmManager;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -172,21 +173,44 @@ public class PerformanceDetails extends AppCompatActivity {
             title = assessmentTitleField.getText().toString();
             startDate = startDateField.getText().toString();
             endDate = endDateField.getText().toString();
-            percentComplete = Integer.parseInt(percentCompleteField.getText().toString());
             courseId = Integer.parseInt(courseIdField.getSelectedItem().toString());
+
+            if (percentCompleteField.getText().toString().equals("")){
+                percentComplete = 0;
+            } else {
+                percentComplete = Integer.parseInt(percentCompleteField.getText().toString());
+            }
 
             Performance newPerformance = new Performance(id, title, startDate, courseId, endDate, percentComplete);
 
             Repository repo = new Repository(getApplication());
-            repo.update(newPerformance);
+            Course course = repo.getCourseById(courseId);
+            LocalDate courseStartDate = LocalDate.parse(course.getStartDate(), DateTimeFormatter.ofPattern(dtFormat));
+            LocalDate courseEndDate = LocalDate.parse(course.getEndDate(), DateTimeFormatter.ofPattern(dtFormat));
 
-            //The Toast functionality
-            Context context = getApplicationContext();
-            String text = "Saved!";
-            int duration = Toast.LENGTH_SHORT;
+            if (LocalDate.parse(endDate, DateTimeFormatter.ofPattern(dtFormat))
+                    .isBefore(LocalDate.parse(startDate, DateTimeFormatter.ofPattern(dtFormat)))){
+                new AlertDialog.Builder(this).setTitle("Date Error")
+                        .setMessage("End date is before the start date please correct this.")
+                        .setPositiveButton("Okay", null).show();
+            } else if (LocalDate.parse(startDate, DateTimeFormatter.ofPattern(dtFormat)).isBefore(courseStartDate)
+                    || LocalDate.parse(startDate, DateTimeFormatter.ofPattern(dtFormat)).isAfter(courseEndDate)
+                    || LocalDate.parse(endDate, DateTimeFormatter.ofPattern(dtFormat)).isAfter(courseEndDate)
+                    || LocalDate.parse(endDate, DateTimeFormatter.ofPattern(dtFormat)).isBefore(courseStartDate)) {
+                new AlertDialog.Builder(this).setTitle("Date Error")
+                        .setMessage("Performance assessment dates must be within specified course date range ("+ courseStartDate.format(DateTimeFormatter.ofPattern(dtFormat)) + " - "+ courseEndDate.format(DateTimeFormatter.ofPattern(dtFormat)) +"). Please correct this.")
+                        .setPositiveButton("Okay", null).show();
+            } else {
+                repo.update(newPerformance);
 
-            Toast toast = Toast.makeText(context, text, duration);
-            toast.show();
+                //The Toast functionality
+                Context context = getApplicationContext();
+                String text = "Saved!";
+                int duration = Toast.LENGTH_SHORT;
+
+                Toast toast = Toast.makeText(context, text, duration);
+                toast.show();
+            }
         } else if (itemId == R.id.deleteOption){
             title = assessmentTitleField.getText().toString();
             startDate = startDateField.getText().toString();

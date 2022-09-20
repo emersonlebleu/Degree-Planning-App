@@ -138,8 +138,13 @@ public class ObjectiveDetails extends AppCompatActivity {
         if (itemId == R.id.saveOption){
             title = assessmentTitleField.getText().toString();
             startDate = startDateField.getText().toString();
-            score = Integer.parseInt(scoreField.getText().toString());
             courseId = Integer.parseInt(courseIdField.getSelectedItem().toString());
+
+            if (scoreField.getText().toString().equals("")){
+                score = 0;
+            } else {
+                score = Integer.parseInt(scoreField.getText().toString());
+            }
 
             Objective newObjective = new Objective(id, title, startDate, courseId, score);
 
@@ -168,12 +173,7 @@ public class ObjectiveDetails extends AppCompatActivity {
             title = assessmentTitleField.getText().toString();
             startDate = startDateField.getText().toString();
             courseId = Integer.parseInt(courseIdField.getSelectedItem().toString());
-
-            if (scoreField.getText().toString().equals("")){
-                score = 0;
-            } else {
-                score = Integer.parseInt(scoreField.getText().toString());
-            }
+            score = Integer.parseInt(scoreField.getText().toString());
 
             Objective newObjective = new Objective(id, title, startDate, courseId, score);
 

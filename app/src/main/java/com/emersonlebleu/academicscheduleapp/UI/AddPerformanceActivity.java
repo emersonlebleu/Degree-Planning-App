@@ -1,7 +1,9 @@
 package com.emersonlebleu.academicscheduleapp.UI;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -10,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -179,15 +182,37 @@ public class AddPerformanceActivity extends AppCompatActivity {
         title = assessmentTitleField.getText().toString();
         startDate = startDateField.getText().toString();
         endDate = endDateField.getText().toString();
-        percentComplete = Integer.parseInt(percentCompleteField.getText().toString());
         courseId = Integer.parseInt(courseIdField.getSelectedItem().toString());
+
+        if (percentCompleteField.getText().toString().equals("")){
+            percentComplete = 0;
+        } else {
+            percentComplete = Integer.parseInt(percentCompleteField.getText().toString());
+        }
 
         Performance newPerformance = new Performance(id, title, startDate, courseId, endDate, percentComplete);
 
         Repository repo = new Repository(getApplication());
-        repo.insert(newPerformance);
+        Course course = repo.getCourseById(courseId);
+        LocalDate courseStartDate = LocalDate.parse(course.getStartDate(), DateTimeFormatter.ofPattern(dtFormat));
+        LocalDate courseEndDate = LocalDate.parse(course.getEndDate(), DateTimeFormatter.ofPattern(dtFormat));
 
-        onBackPressed();
+        if (LocalDate.parse(endDate, DateTimeFormatter.ofPattern(dtFormat))
+                .isBefore(LocalDate.parse(startDate, DateTimeFormatter.ofPattern(dtFormat)))){
+            new AlertDialog.Builder(this).setTitle("Date Error")
+                    .setMessage("End date is before the start date please correct this.")
+                    .setPositiveButton("Okay", null).show();
+        } else if (LocalDate.parse(startDate, DateTimeFormatter.ofPattern(dtFormat)).isBefore(courseStartDate)
+                || LocalDate.parse(startDate, DateTimeFormatter.ofPattern(dtFormat)).isAfter(courseEndDate)
+                || LocalDate.parse(endDate, DateTimeFormatter.ofPattern(dtFormat)).isAfter(courseEndDate)
+                || LocalDate.parse(endDate, DateTimeFormatter.ofPattern(dtFormat)).isBefore(courseStartDate)) {
+            new AlertDialog.Builder(this).setTitle("Date Error")
+                    .setMessage("Performance assessment dates must be within specified course date range ("+ courseStartDate.format(DateTimeFormatter.ofPattern(dtFormat)) + " - "+ courseEndDate.format(DateTimeFormatter.ofPattern(dtFormat)) +"). Please correct this.")
+                    .setPositiveButton("Okay", null).show();
+        } else {
+            repo.insert(newPerformance);
+            onBackPressed();
+        }
     }
 
     private void updateLabelStart(){
