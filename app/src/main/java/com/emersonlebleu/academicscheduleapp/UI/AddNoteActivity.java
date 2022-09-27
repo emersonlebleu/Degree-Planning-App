@@ -2,16 +2,20 @@ package com.emersonlebleu.academicscheduleapp.UI;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 
+import com.emersonlebleu.academicscheduleapp.Checker;
 import com.emersonlebleu.academicscheduleapp.Database.Repository;
 import com.emersonlebleu.academicscheduleapp.Entity.Course;
 import com.emersonlebleu.academicscheduleapp.Entity.Note;
 import com.emersonlebleu.academicscheduleapp.R;
+
+import java.time.format.DateTimeFormatter;
 
 public class AddNoteActivity extends AppCompatActivity {
     int courseId;
@@ -67,11 +71,17 @@ public class AddNoteActivity extends AppCompatActivity {
     public void saveNewNote(View view) {
         text = noteField.getText().toString();
 
-        Note newNote = new Note(text, courseId);
+        if (Checker.checkNewNote(text)){
+            Note newNote = new Note(text, courseId);
 
-        Repository repo = new Repository(getApplication());
-        repo.insert(newNote);
+            Repository repo = new Repository(getApplication());
+            repo.insert(newNote);
 
-        onBackPressed();
+            onBackPressed();
+        } else {
+            new AlertDialog.Builder(this).setTitle("Null Note")
+                    .setMessage("Note content cannot be empty.")
+                    .setPositiveButton("Okay", null).show();
+        }
     }
 }

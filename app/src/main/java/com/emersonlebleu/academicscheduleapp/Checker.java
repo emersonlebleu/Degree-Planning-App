@@ -26,4 +26,12 @@ public class Checker {
             return false;
         }
     }
+
+    public static boolean checkNewAssessment(String title){
+        if (title != ""){
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

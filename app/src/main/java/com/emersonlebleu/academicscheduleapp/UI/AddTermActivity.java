@@ -12,6 +12,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.emersonlebleu.academicscheduleapp.Checker;
 import com.emersonlebleu.academicscheduleapp.Database.Repository;
 import com.emersonlebleu.academicscheduleapp.Entity.Term;
 import com.emersonlebleu.academicscheduleapp.R;
@@ -135,6 +136,10 @@ public class AddTermActivity extends AppCompatActivity {
                 .isBefore(LocalDate.parse(startDate, DateTimeFormatter.ofPattern(dtFormat)))){
             new AlertDialog.Builder(this).setTitle("Date Error")
                     .setMessage("End date is before the start date please correct this.")
+                    .setPositiveButton("Okay", null).show();
+        } else if (!Checker.checkNewTerm(title)) {
+            new AlertDialog.Builder(this).setTitle("Null Title")
+                    .setMessage("Term title cannot be empty.")
                     .setPositiveButton("Okay", null).show();
         } else {
             Term newTerm = new Term(title, startDate, endDate);

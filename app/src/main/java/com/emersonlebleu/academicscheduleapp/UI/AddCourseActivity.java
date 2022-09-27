@@ -14,6 +14,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import com.emersonlebleu.academicscheduleapp.Checker;
 import com.emersonlebleu.academicscheduleapp.Database.Repository;
 import com.emersonlebleu.academicscheduleapp.Entity.Course;
 import com.emersonlebleu.academicscheduleapp.Entity.Term;
@@ -212,7 +213,11 @@ public class AddCourseActivity extends AppCompatActivity {
             new AlertDialog.Builder(this).setTitle("Date Error")
                     .setMessage("Course dates must be within specified term ("+ termStartDate.format(DateTimeFormatter.ofPattern(dtFormat)) + " - "+ termEndDate.format(DateTimeFormatter.ofPattern(dtFormat)) +"). Please correct this.")
                     .setPositiveButton("Okay", null).show();
-        } else {
+        } else if (!Checker.checkNewCourse(title)) {
+            new AlertDialog.Builder(this).setTitle("Null Title")
+                    .setMessage("Course title cannot be empty.")
+                    .setPositiveButton("Okay", null).show();
+        }else {
             repo.insert(newCourse);
             onBackPressed();
         }

@@ -56,4 +56,20 @@ public class CheckerTest {
         boolean result = Checker.checkNewCourse(title);
         assertFalse(result);
     }
+    //Assessment
+    @Test
+    public void assessmentIsOkay(){
+        String title = "Title for course";
+
+        boolean result = Checker.checkNewAssessment(title);
+        assertTrue(result);
+    }
+
+    @Test
+    public void assessmentIsNotOkay(){
+        String title = "";
+
+        boolean result = Checker.checkNewAssessment(title);
+        assertFalse(result);
+    }
 }

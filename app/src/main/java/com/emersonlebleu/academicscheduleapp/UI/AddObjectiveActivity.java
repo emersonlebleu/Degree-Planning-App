@@ -14,6 +14,7 @@ import android.widget.Spinner;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.emersonlebleu.academicscheduleapp.Checker;
 import com.emersonlebleu.academicscheduleapp.Database.Repository;
 import com.emersonlebleu.academicscheduleapp.Entity.Course;
 import com.emersonlebleu.academicscheduleapp.Entity.Objective;
@@ -162,6 +163,10 @@ public class AddObjectiveActivity extends AppCompatActivity {
                 || LocalDate.parse(startDate, DateTimeFormatter.ofPattern(dtFormat)).isAfter(courseEndDate)) {
             new AlertDialog.Builder(this).setTitle("Date Error")
                     .setMessage("Assessment date must be within course timeframe ("+ courseStartDate.format(DateTimeFormatter.ofPattern(dtFormat)) + " - "+ courseEndDate.format(DateTimeFormatter.ofPattern(dtFormat)) +"). Please correct this.")
+                    .setPositiveButton("Okay", null).show();
+        } else if (!Checker.checkNewAssessment(title)) {
+            new AlertDialog.Builder(this).setTitle("Null Title")
+                    .setMessage("Assessment title cannot be empty.")
                     .setPositiveButton("Okay", null).show();
         } else {
             repo.insert(newObjective);

@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.emersonlebleu.academicscheduleapp.Checker;
 import com.emersonlebleu.academicscheduleapp.Database.Repository;
 import com.emersonlebleu.academicscheduleapp.Entity.Assessment;
 import com.emersonlebleu.academicscheduleapp.Entity.Course;
@@ -208,6 +209,10 @@ public class AddPerformanceActivity extends AppCompatActivity {
                 || LocalDate.parse(endDate, DateTimeFormatter.ofPattern(dtFormat)).isBefore(courseStartDate)) {
             new AlertDialog.Builder(this).setTitle("Date Error")
                     .setMessage("Performance assessment dates must be within specified course date range ("+ courseStartDate.format(DateTimeFormatter.ofPattern(dtFormat)) + " - "+ courseEndDate.format(DateTimeFormatter.ofPattern(dtFormat)) +"). Please correct this.")
+                    .setPositiveButton("Okay", null).show();
+        } else if (!Checker.checkNewAssessment(title)) {
+            new AlertDialog.Builder(this).setTitle("Null Title")
+                    .setMessage("Assessment title cannot be empty.")
                     .setPositiveButton("Okay", null).show();
         } else {
             repo.insert(newPerformance);
