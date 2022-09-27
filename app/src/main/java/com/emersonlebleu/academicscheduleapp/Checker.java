@@ -10,4 +10,20 @@ public class Checker {
             return false;
         }
     }
+
+    public static boolean checkNewTerm(String title){
+        if (title != ""){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static boolean checkNewCourse(String title){
+        if (title != ""){
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
